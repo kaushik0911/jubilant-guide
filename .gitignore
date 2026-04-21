@@ -1,0 +1,5 @@
+.venv/*
+.zed
+__pycache__
+cache
+ors-docker/*
