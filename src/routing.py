@@ -5,6 +5,7 @@ class Router:
     def __init__(self):
         self.base_url = "http://localhost:8080/ors/v2/isochrones/driving-car"
 
+
     def get_isochrone(self, lat, lon, time_limit=10):
         time_seconds = [time_limit * 60]
 
