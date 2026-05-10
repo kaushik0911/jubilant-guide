@@ -7,8 +7,10 @@ class SpatialEngine:
         self.con = duckdb.connect(database=":memory:")
         self.con.execute("INSTALL spatial; LOAD spatial;")
 
+
     def get_city_geocode(self, city_name):
         return ox.geocode(city_name)
+
 
     def get_pois(self, city_name, amenity="hospital"):
 
@@ -21,6 +23,7 @@ class SpatialEngine:
         self.con.register("raw_pois", gdf)
 
         return gdf
+
 
     def filter_points_in_isochrone(self, isochrone_geojson):
         import json

@@ -4,8 +4,8 @@ import streamlit as st
 from shapely import wkt
 from streamlit_folium import st_folium
 
-from data_processor import SpatialEngine
-from routing import Router
+from src.data_processor import SpatialEngine
+from src.routing import Router
 
 if "engine" not in st.session_state:
     st.session_state.engine = SpatialEngine()
@@ -51,7 +51,7 @@ if st.button("Analyze Reachability"):
         for _, row in filtered_df.iterrows():
             point = wkt.loads(row["wkt_geom"])
             folium.Marker(
-                location=[point.y, point.x],
+                location=[point.y, point.x], # type: ignore
                 popup=row["name"],
                 icon=folium.Icon(color="blue", icon="info-sign"),
             ).add_to(m)
