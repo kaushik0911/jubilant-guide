@@ -1,18 +1,19 @@
-import requests
+from typing import Any, Dict, List, Optional
+
+from openrouteservice import client
+
+from src.components.roadblock import RoadblockCache
+
+BASE_URL = "http://localhost:8080/ors"
 
 
 class Router:
     def __init__(self):
-        self.base_url = "http://localhost:8080/ors/v2/isochrones/driving-car"
 
+        self.ors_client = client.Client(base_url=BASE_URL)
 
     def get_isochrone(self, lat, lon, time_limit=10):
         time_seconds = [time_limit * 60]
-
-        headers = {
-            "Accept": "application/geo+json;charset=UTF-8",
-            "Content-Type": "application/json; charset=utf-8",
-        }
 
         body = {
             "locations": [[lon, lat]],  # ORS = [Longitude, Latitude]
@@ -21,12 +22,37 @@ class Router:
         }
 
         try:
-            response = requests.post(self.base_url, json=body, headers=headers)
-
-            if response.status_code != 200:
-                print(f"Full Error Response: {response.text}")
-
-            response.raise_for_status()
-            return response.json()
+            return self.ors_client.isochrones(**body)
         except Exception as e:
-            raise Exception(f"Local ORS request failed: {e}")
+            raise RuntimeError(f"Isochrone request failed: {e}")
+
+    def get_directions(
+        self,
+        start_coords: List[float],
+        end_coords: List[float],
+        avoid_polygons: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+
+        roadblock_cache = RoadblockCache()
+
+        body = {
+            "coordinates": [
+                roadblock_cache.normalize_coords(start_coords),
+                roadblock_cache.normalize_coords(end_coords),
+            ],
+            "profile": "driving-car",
+            "format": "geojson",
+            "options": {},
+        }
+
+        if avoid_polygons:
+            body["options"]["avoid_polygons"] = roadblock_cache.normalize_coords(
+                avoid_polygons
+            )
+
+        try:
+            route = self.ors_client.directions(**body)
+
+            return route
+        except Exception as e:
+            raise RuntimeError(f"Directions request failed: {e}")
