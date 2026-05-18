@@ -197,6 +197,8 @@ make stop
    - All POIs within range
    - Accessibility statistics
 
+![Alt text](screenshot.png)
+
 ## Available Commands
 
 ```bash
