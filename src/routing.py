@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional
 
 from openrouteservice import client
 
-from src.components.roadblock import RoadblockCache
+from src.helpers.roadblock import RoadblockCache
 
 BASE_URL = "http://localhost:8080/ors"
 

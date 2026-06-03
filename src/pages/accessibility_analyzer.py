@@ -3,7 +3,7 @@ import streamlit as st
 from shapely import wkt
 from streamlit_folium import st_folium
 
-from src.components.isochrone import IsochroneFilter
+from src.helpers.isochrone import IsochroneFilter
 from src.routing import Router
 
 router = Router()

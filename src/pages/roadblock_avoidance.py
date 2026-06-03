@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from streamlit_folium import st_folium
 
-from src.components.roadblock import (
+from src.helpers.roadblock import (
     RoadblockCache,
     RoadblockFilter,
     RoadblockVisualizer,
