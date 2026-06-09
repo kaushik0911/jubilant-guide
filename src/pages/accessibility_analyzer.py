@@ -61,8 +61,20 @@ def main():
                 m = folium.Map(
                     location=[city_center_lat, city_center_lon],
                     zoom_start=13,
-                    tiles="cartodbpositron",
+                    tiles="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+                    attr="Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap (CC-BY-SA)",
+                    name="3D Terrain Relief",
                 )
+
+                folium.TileLayer(
+                    tiles="cartodbpositron", name="Flat Light Canvas"
+                ).add_to(m)
+
+                folium.TileLayer(
+                    tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                    attr="Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+                    name="Satellite Imagery",
+                ).add_to(m)
 
                 folium.Marker(
                     location=[city_center_lat, city_center_lon],

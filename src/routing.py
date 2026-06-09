@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from openrouteservice import client
+import openrouteservice as ors
 
 from src.components.roadblock import RoadblockCache
 
@@ -10,7 +10,8 @@ BASE_URL = "http://localhost:8080/ors"
 class Router:
     def __init__(self):
 
-        self.ors_client = client.Client(base_url=BASE_URL)
+        self.ors_local_client = ors.Client(base_url=BASE_URL)
+        self.ors_web_client = ors.Client(key="")
 
     def get_isochrone(self, lat, lon, time_limit=10):
         time_seconds = [time_limit * 60]
@@ -22,7 +23,7 @@ class Router:
         }
 
         try:
-            return self.ors_client.isochrones(**body)
+            return self.ors_local_client.isochrones(**body)
         except Exception as e:
             raise RuntimeError(f"Isochrone request failed: {e}")
 
@@ -51,8 +52,22 @@ class Router:
             )
 
         try:
-            route = self.ors_client.directions(**body)
+            return self.ors_local_client.directions(**body)
+        except Exception as e:
+            raise RuntimeError(f"Directions request failed: {e}")
 
-            return route
+    def get_elevation(self, coords: List[tuple[float, float]]):
+        try:
+            return self.ors_web_client.elevation_line(
+                format_in="geojson",
+                geometry={
+                    "type": "LineString",
+                    "coordinates": [
+                        [49.415029, 8.692149],
+                        [49.407036, 8.676892],
+                    ],
+                },
+            )
+
         except Exception as e:
             raise RuntimeError(f"Directions request failed: {e}")

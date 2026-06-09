@@ -9,6 +9,7 @@ def main() -> None:
             "./src/pages/accessibility_analyzer.py", title="Accessibility Analyzer"
         ),
         st.Page("./src/pages/roadblock_avoidance.py", title="Roadblock Avoidance"),
+        st.Page("./src/pages/route_elevation.py", title="Path Elevation Extractor"),
     ]
 
     pg = st.navigation(pages, position="top")
