@@ -6,3 +6,5 @@ ors-docker/*
 osr-docker
 .vscode/*
 output.log
+*.pbf
+*.duckdb
